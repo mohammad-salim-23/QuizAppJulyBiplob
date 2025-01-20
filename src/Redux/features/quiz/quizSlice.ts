@@ -4,13 +4,13 @@ import { createSlice } from '@reduxjs/toolkit';
 interface QuizState{
     questions: typeof quizData;
     currentQuestionIndex:number;
-    useAnswers:(string | null)[];//track user answers (null means no answer selected)
+    userAnswers:(string | null)[];//track user answers (null means no answer selected)
     quizComplete:boolean
 }
 const initialState: QuizState = {
     questions:quizData,
     currentQuestionIndex:0,
-    useAnswers:Array(quizData.length).fill(null),
+    userAnswers:Array(quizData.length).fill(null),
     quizComplete:false
 }
 export const quizSlice = createSlice({
@@ -19,7 +19,7 @@ export const quizSlice = createSlice({
     reducers: {
         setAnswer:(state,action)=>{
            const {questionIndex, answer} = action.payload
-           state.useAnswers[questionIndex] = answer
+           state.userAnswers[questionIndex] = answer
            console.log(answer)
         },
         nextQuestion:(state)=>{
@@ -37,5 +37,5 @@ export const quizSlice = createSlice({
         }
     }
 });
-export const {setAnswer} = quizSlice.actions
+export const {setAnswer,nextQuestion,previousQuestion,completeQuiz} = quizSlice.actions
 export default quizSlice.reducer
