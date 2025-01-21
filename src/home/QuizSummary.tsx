@@ -1,5 +1,6 @@
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useAppSelector } from "@/Redux/hooks"
+import { Progress } from "@radix-ui/react-progress";
 const getPerfomance = (percentage: number)=>{
     if(percentage>=90){
         return {rating:"Tumi Bangladesh", color:"bg-green-800"};
@@ -11,7 +12,7 @@ const getPerfomance = (percentage: number)=>{
         return {rating:"tumi AwamiLeague", color:"bg-red-500"}
     }
 };
-export const QuizSummary(){
+export function QuizSummary(){
     const {questions, userAnswers} = useAppSelector((state)=>state.quiz);
     //calculate correct and incorrect answers
     const correctAnswersCount = questions.reduce((count, question, index)=>{
@@ -21,17 +22,36 @@ export const QuizSummary(){
   const correctPercentage = parseFloat(((correctAnswersCount/questions.length)*100).toFixed(2));
   const {rating, color} = getPerfomance(correctPercentage);
   return (
-    <Card>
+    <Card className="max-w-lg mx-auto p-6 rounded-xl shadow-xl">
   <CardHeader>
-    <CardTitle>Card Title</CardTitle>
-    <CardDescription>Card Description</CardDescription>
+    <h2 className="text-2xl font-bold">Quiz Summary</h2>
+
+   
   </CardHeader>
   <CardContent>
-    <p>Card Content</p>
+    <h3 className="text-xl font-medium mb-4"> 
+        You got {correctAnswersCount} out of {questions.length} correct!
+    </h3>
+    {/* progress bar */}
+    <div className="mb-4">
+    <Progress value={correctPercentage} className={`h-4 rounded-full ${color}`} />
+    <div className="flex justify-between mt-2">
+        <span className="text-sm">{correctPercentage}</span>
+        <span className="text-sm">Perfomance: {rating}</span>
+    </div>
+    </div>
+    {/* statistics */}
+    <div className="mb-4">
+         <p className="text-sm">
+            <strong>Incorrect Answers</strong>
+            {incorrectAnswerCount}
+         </p>
+    </div>
+    <div className="mt-4">
+          <p className="text-sm">Great job! Keep practicing to improve your performance.</p>
+        </div>
   </CardContent>
-  <CardFooter>
-    <p>Card Footer</p>
-  </CardFooter>
+  
 </Card>
   )
 
